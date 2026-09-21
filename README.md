@@ -130,9 +130,9 @@ Os servidores MCP entram na rede `casapronto` e acessam as APIs pelo nome dos co
 ### 3. Cliente das APIs REST
 
 ```bash
-cd api_client
+cd services
 npm install
-npm start
+node client.ts
 ```
 
 Menu interativo com as 12 consultas (3 por serviço). A opção `s` mostra o status dos quatro serviços.

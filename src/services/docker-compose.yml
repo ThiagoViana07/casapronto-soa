@@ -58,13 +58,18 @@ services:
       POSTGRES_USER: casapronto
       POSTGRES_PASSWORD: casapronto123
       POSTGRES_DB: casapronto
-    ports:
-      - "5432:5432"
+    # A porta do banco NÃO é publicada: as APIs o acessam pela rede Docker.
+    # Isso evita conflito com um PostgreSQL local (5432) na máquina de quem executar.
+    # Para acessar do host (psql, DBeaver), descomente:
+    # ports:
+    #   - "127.0.0.1:5433:5432"
     # volumes:
     #   - postgres_data:/var/lib/postgresql/data
     volumes:
       - ./casapronto.sql:/docker-entrypoint-initdb.d/casapronto.sql
 
+# Rede compartilhada com os servidores MCP (mcp_server/docker-compose.yml).
+# O nome fixo faz a rede não depender do nome da pasta do projeto.
 networks:
   default:
     name: casapronto
