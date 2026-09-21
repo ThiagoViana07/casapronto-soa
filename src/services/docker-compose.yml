@@ -1,0 +1,70 @@
+services:
+  customer:
+    build: .
+    container_name: casapronto-customer
+    hostname: casapronto-customer
+    restart: always
+    # volumes:
+    #   - ./src/Customer:/app
+    volumes:
+      - ./src/Customer:/app/src/Customer
+    ports:
+      - "3001:3000"
+    command: ["npm", "exec", "tsx", "--", "watch", "src/Customer/service.ts"]
+  provider:
+    build: .
+    container_name: casapronto-provider
+    hostname: casapronto-provider
+    restart: always
+    # volumes:
+    #   - ./src/Provider:/app
+    volumes:
+      - ./src/Provider:/app/src/Provider
+    ports:
+      - "3002:3000"
+    command: ["npm", "exec", "tsx", "--", "watch", "src/Provider/service.ts"]
+
+  calls:
+    build: .
+    container_name: casapronto-calls
+    hostname: casapronto-calls
+    restart: always
+    # volumes:
+    #   - ./src/Provider:/app
+    volumes:
+      - ./src/Calls:/app/src/Calls
+    ports:
+      - "3003:3000"
+    command: ["npm", "exec", "tsx", "--", "watch", "src/Calls/service.ts"]
+  reviews:
+    build: .
+    container_name: casapronto-reviews
+    hostname: casapronto-reviews
+    restart: always
+    # volumes:
+    #   - ./src/Provider:/app
+    volumes:
+      - ./src/Reviews:/app/src/Reviews
+    ports:
+      - "3004:3000"
+    command: ["npm", "exec", "tsx", "--", "watch", "src/Reviews/service.ts"]
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: casapronto-postgres
+    hostname: casapronto-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: casapronto
+      POSTGRES_PASSWORD: casapronto123
+      POSTGRES_DB: casapronto
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+    volumes:
+      - ./casapronto.sql:/docker-entrypoint-initdb.d/casapronto.sql
+
+networks:
+  default:
+    name: casapronto

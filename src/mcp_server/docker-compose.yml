@@ -1,0 +1,43 @@
+x-mcp-base: &mcp-base
+  build: .
+  image: mcp-server
+
+services:
+  mcp_calls:
+    <<: *mcp-base
+    ports:
+      - "127.0.0.1:4001:3000"
+    environment:
+      SERVICE: calls
+      CALLS_API_BASE: http://casapronto-calls:3000/calls
+
+  mcp_customer:
+    <<: *mcp-base
+    ports:
+      - "127.0.0.1:4002:3000"
+    environment:
+      SERVICE: customer
+      CUSTOMER_API_BASE: http://casapronto-customer:3000/customer
+
+  mcp_provider:
+    <<: *mcp-base
+    ports:
+      - "127.0.0.1:4003:3000"
+    environment:
+      SERVICE: provider
+      PROVIDER_API_BASE: http://casapronto-provider:3000/provider
+
+  mcp_reviews:
+    <<: *mcp-base
+    ports:
+      - "127.0.0.1:4004:3000"
+    environment:
+      SERVICE: reviews
+      REVIEWS_API_BASE: http://casapronto-reviews:3000/reviews
+
+# Rede criada pelo compose das APIs (services/docker-compose.yml).
+# Suba as APIs ANTES dos servidores MCP.
+networks:
+  default:
+    name: casapronto
+    external: true
